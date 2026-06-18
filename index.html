@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUGARCRASH// — hyperpop zine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bubblegum:#FF2D9B;
+    --lime:#C6FF1F;
+    --cyan:#00E5FF;
+    --lilac:#B388FF;
+    --void:#08060d;
+    --void2:#0f0a18;
+    --chrome:#FDF6FF;
+    --ink:#f6e9ff;
+    --display:'Unbounded',system-ui,sans-serif;
+    --body:'Space Grotesk',system-ui,sans-serif;
+    --mono:'Space Mono',ui-monospace,monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--void);
+    color:var(--ink);
+    font-family:var(--body);
+    overflow-x:hidden;
+    position:relative;
+    cursor:default;
+  }
+
+  /* ambient gradient blobs */
+  .blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.55;z-index:0;pointer-events:none;animation:drift 18s ease-in-out infinite alternate}
+  .blob.b1{width:46vw;height:46vw;background:var(--bubblegum);top:-12vw;left:-8vw}
+  .blob.b2{width:40vw;height:40vw;background:var(--cyan);top:30vh;right:-12vw;animation-delay:-6s}
+  .blob.b3{width:38vw;height:38vw;background:var(--lilac);bottom:-10vw;left:25vw;animation-delay:-11s}
+  @keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(4vw,-3vw) scale(1.18)}}
+
+  /* grain + dotgrid overlays */
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .dotgrid{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.25;
+    background-image:radial-gradient(rgba(255,255,255,.18) 1px,transparent 1px);background-size:26px 26px}
+
+  .wrap{position:relative;z-index:2}
+  section{position:relative;z-index:2}
+
+  /* ===== NAV ===== */
+  nav{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    padding:14px clamp(16px,4vw,48px);
+    background:rgba(8,6,13,.55);backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,45,155,.35)}
+  .brand{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:.5px;
+    background:linear-gradient(90deg,var(--cyan),var(--bubblegum),var(--lime));
+    -webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+  .navlinks{display:flex;gap:22px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+  .navlinks a{color:var(--ink);text-decoration:none;opacity:.8;transition:.2s;padding:4px 2px}
+  .navlinks a:hover{opacity:1;color:var(--lime);text-shadow:0 0 12px var(--lime)}
+  .navlinks a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+  @media(max-width:680px){.navlinks{display:none}}
+
+  /* ===== HERO ===== */
+  header{min-height:92vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:60px clamp(16px,5vw,40px) 30px;position:relative}
+  .eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4vw,13px);letter-spacing:4px;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:22px;border:1px solid rgba(0,229,255,.5);padding:7px 16px;border-radius:999px;
+    background:rgba(0,229,255,.06)}
+
+  .wordmark{font-family:var(--display);font-weight:900;line-height:.84;letter-spacing:-2px;
+    font-size:clamp(58px,16vw,210px);position:relative;cursor:pointer;user-select:none}
+  .wordmark .chrome{
+    background:linear-gradient(180deg,#fff 0%,#e9d4ff 28%,#ff7ec9 48%,#7ce3ff 62%,#caff5e 80%,#fff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 4px 24px rgba(255,45,155,.45))}
+  .wordmark::before,.wordmark::after{content:"SUGARCRASH";position:absolute;inset:0;
+    background:none;-webkit-text-fill-color:initial;opacity:0;pointer-events:none}
+  .wordmark.glitch::before{color:var(--cyan);opacity:.85;animation:gl1 .35s steps(2) 1}
+  .wordmark.glitch::after{color:var(--bubblegum);opacity:.85;animation:gl2 .35s steps(2) 1}
+  @keyframes gl1{0%{transform:translate(0,0)}50%{transform:translate(-5px,3px)}100%{transform:translate(3px,-2px)}}
+  @keyframes gl2{0%{transform:translate(0,0)}50%{transform:translate(5px,-3px)}100%{transform:translate(-3px,2px)}}
+  .slash{color:var(--lime);-webkit-text-fill-color:var(--lime);text-shadow:0 0 30px var(--lime)}
+
+  .subhead{max-width:640px;margin:26px auto 0;font-size:clamp(15px,2.1vw,20px);line-height:1.5;color:#d9c8ee}
+  .subhead b{color:var(--lime)}
+  .herobtns{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+  .btn{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.5px;
+    padding:14px 26px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:.18s}
+  .btn-main{background:linear-gradient(90deg,var(--bubblegum),var(--lilac));color:#fff;box-shadow:0 8px 30px rgba(255,45,155,.5)}
+  .btn-main:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 40px rgba(255,45,155,.7)}
+  .btn-ghost{background:transparent;color:var(--cyan);border:1.5px solid var(--cyan)}
+  .btn-ghost:hover{background:var(--cyan);color:var(--void)}
+  .btn:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+
+  /* floating doodles */
+  .doodle{position:absolute;z-index:1;pointer-events:none;opacity:.9;animation:float 7s ease-in-out infinite}
+  .doodle.d1{top:16%;left:8%;width:46px;animation-delay:-1s}
+  .doodle.d2{top:24%;right:9%;width:60px;animation-delay:-3s}
+  .doodle.d3{bottom:16%;left:14%;width:40px;animation-delay:-5s}
+  .doodle.d4{bottom:24%;right:13%;width:52px;animation-delay:-2s}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-22px) rotate(8deg)}}
+  @media(max-width:680px){.doodle.d1,.doodle.d3{display:none}}
+
+  /* ===== MARQUEE ===== */
+  .marquee{overflow:hidden;white-space:nowrap;border-top:1.5px solid var(--bubblegum);border-bottom:1.5px solid var(--cyan);
+    background:linear-gradient(90deg,rgba(255,45,155,.12),rgba(0,229,255,.12));padding:14px 0}
+  .marquee .track{display:inline-block;animation:scroll 22s linear infinite;font-family:var(--display);font-weight:700;
+    font-size:clamp(18px,3vw,30px);text-transform:uppercase}
+  .marquee .track span{margin:0 18px;color:var(--ink)}
+  .marquee .track span:nth-child(2n){color:var(--lime)}
+  .marquee .track span:nth-child(3n){color:var(--cyan)}
+  .marquee .track .star{color:var(--bubblegum)}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ===== SECTION SHELL ===== */
+  .sec{padding:clamp(60px,9vw,120px) clamp(16px,5vw,64px);max-width:1180px;margin:0 auto}
+  .seclabel{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);
+    display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .seclabel::before{content:"";width:34px;height:2px;background:var(--bubblegum)}
+  .sectitle{font-family:var(--display);font-weight:900;font-size:clamp(30px,6vw,64px);line-height:.95;letter-spacing:-1px;margin-bottom:24px}
+  .sectitle em{font-style:normal;background:linear-gradient(90deg,var(--bubblegum),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* manifesto */
+  .manifesto p{font-size:clamp(18px,2.6vw,28px);line-height:1.5;max-width:900px;color:#e7d8f7}
+  .manifesto p .hl{background:var(--bubblegum);color:var(--void);padding:0 6px;font-weight:700;border-radius:4px}
+  .manifesto p .hl2{background:var(--lime);color:var(--void);padding:0 6px;font-weight:700;border-radius:4px}
+  .manifesto p .hl3{background:var(--cyan);color:var(--void);padding:0 6px;font-weight:700;border-radius:4px}
+
+  /* ===== ARTIST GRID ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;margin-top:36px}
+  .card{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);padding:0 0 20px;transition:.25s;cursor:pointer}
+  .card:hover{transform:translateY(-6px) rotate(-.6deg);border-color:var(--bubblegum);box-shadow:0 18px 50px rgba(255,45,155,.35)}
+  .art{height:180px;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:14px}
+  .art::after{content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;
+    background-image:radial-gradient(rgba(255,255,255,.7) 1px,transparent 1px);background-size:9px 9px}
+  .a1{background:linear-gradient(135deg,#ff2d9b,#b388ff)}            /* ayesha */
+  .a2{background:linear-gradient(135deg,#00e5ff,#ff8edb)}            /* slayyyter */
+  .a3{background:linear-gradient(135deg,#111,#ff2d9b 55%,#00e5ff)}   /* gaga */
+  .a4{background:linear-gradient(135deg,#b388ff,#ffd9f2)}            /* ariana */
+  .a5{background:linear-gradient(135deg,#00e5ff,#ff7ec9)}            /* tate */
+  .a6{background:linear-gradient(135deg,#c6ff1f,#ff2d9b)}            /* doja */
+  .a7{background:linear-gradient(135deg,#00e5ff,#7c5cff,#ffffff)}    /* zara */
+  .a8{background:linear-gradient(135deg,#0a0a0a,#ff2d9b 60%,#c6ff1f)}/* charli */
+  .a9{background:linear-gradient(135deg,#b388ff,#ff2d9b 50%,#c6ff1f)} /* dorian */
+  .a10{background:linear-gradient(135deg,#ff7ec9,#b388ff 50%,#00e5ff)}/* addison */
+  .eratag{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+    background:rgba(8,6,13,.7);color:#fff;padding:5px 10px;border-radius:999px;backdrop-filter:blur(4px)}
+  .playbadge{width:38px;height:38px;border-radius:50%;background:rgba(8,6,13,.65);display:grid;place-items:center;
+    color:#fff;font-size:13px;backdrop-filter:blur(4px);transition:.2s}
+  .card:hover .playbadge{background:var(--lime);color:var(--void);transform:scale(1.12)}
+  .cardbody{padding:16px 16px 0}
+  .cardbody h3{font-family:var(--display);font-weight:700;font-size:21px;margin-bottom:6px}
+  .cardbody p{font-size:13.5px;line-height:1.5;color:#cbbce0}
+  .memoriam{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--cyan);margin-top:8px;display:block}
+
+  /* ===== LEXICON ===== */
+  .lex{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:34px}
+  .term{border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:18px;background:rgba(255,255,255,.02);transition:.2s}
+  .term:hover{background:rgba(198,255,31,.08);border-color:var(--lime)}
+  .term dt{font-family:var(--display);font-weight:700;font-size:16px;color:var(--lime);margin-bottom:7px}
+  .term dd{font-size:13px;line-height:1.5;color:#cbbce0}
+
+  /* ===== PLAYLIST ===== */
+  .playlist{margin-top:34px;border:1px solid rgba(0,229,255,.3);border-radius:18px;overflow:hidden;background:rgba(0,229,255,.03)}
+  .plrow{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:15px 20px;border-bottom:1px solid rgba(255,255,255,.07);transition:.18s}
+  .plrow:last-child{border-bottom:none}
+  .plrow:hover{background:rgba(255,45,155,.1)}
+  .plnum{font-family:var(--mono);font-size:13px;color:var(--cyan)}
+  .plrow:hover .plnum{color:var(--lime)}
+  .pltitle{font-family:var(--display);font-weight:700;font-size:15px}
+  .plartist{font-size:12.5px;color:#b6a6cc;font-family:var(--mono)}
+  .pltag{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:#fff;background:rgba(255,45,155,.4);padding:4px 9px;border-radius:999px;text-transform:uppercase}
+  .pllinks{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  .linkpill{font-family:var(--mono);font-size:10px;letter-spacing:.5px;text-transform:uppercase;text-decoration:none;
+    padding:7px 11px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;transition:.16s;border:1px solid transparent;cursor:pointer;background:none}
+  .linkpill.sp{background:rgba(30,215,96,.14);color:#1ed760;border-color:rgba(30,215,96,.5)}
+  .linkpill.sp:hover{background:#1ed760;color:#06210f}
+  .linkpill.am{background:rgba(250,80,160,.14);color:#ff8fc4;border-color:rgba(250,80,160,.5)}
+  .linkpill.am:hover{background:#fa50a0;color:#fff}
+  .linkpill.yt{background:rgba(255,45,85,.14);color:#ff5d77;border-color:rgba(255,45,85,.5)}
+  .linkpill.yt:hover{background:#ff2d55;color:#fff}
+  .linkpill.pv{background:rgba(0,229,255,.12);color:var(--cyan);border-color:rgba(0,229,255,.5)}
+  .linkpill.pv:hover{background:var(--cyan);color:var(--void)}
+  .linkpill:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+  @media(max-width:560px){.plrow{grid-template-columns:34px 1fr;row-gap:10px}.pllinks{grid-column:1/-1;justify-content:flex-start}}
+
+  /* ===== EMBEDDED PLAYERS ===== */
+  .players{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:30px}
+  .pframe{border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03);padding:10px;transition:.2s}
+  .pframe:hover{border-color:var(--cyan)}
+  .pframe h4{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin:2px 4px 9px}
+  .pframe iframe{border:0;border-radius:12px;display:block;width:100%}
+  .sandboxnote{font-family:var(--mono);font-size:11.5px;color:#b6a6cc;margin-top:18px;line-height:1.55;
+    border:1px dashed rgba(0,229,255,.4);border-radius:12px;padding:13px 15px;background:rgba(0,229,255,.04)}
+  .sandboxnote b{color:var(--lime)}
+
+  /* ===== MEDIA PLAYER WINDOW (signature) ===== */
+  .player{position:fixed;bottom:22px;right:22px;width:288px;z-index:60;
+    border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.25);
+    background:linear-gradient(180deg,#1a1226,#0c0814);
+    box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 0 1px rgba(255,45,155,.2);
+    font-family:var(--mono)}
+  .player.dragging{transition:none;user-select:none}
+  .pbar{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;cursor:grab;
+    background:linear-gradient(90deg,var(--bubblegum),var(--lilac),var(--cyan));color:#fff}
+  .pbar:active{cursor:grabbing}
+  .pbar .ttl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+  .pbtns{display:flex;gap:6px}
+  .pbtns i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.85);display:block}
+  .pbody{padding:14px}
+  .pcover{height:110px;border-radius:9px;background:linear-gradient(135deg,#ff2d9b,#00e5ff,#c6ff1f);
+    position:relative;overflow:hidden;display:grid;place-items:center}
+  .pcover::after{content:"";position:absolute;inset:0;opacity:.2;background-image:radial-gradient(rgba(255,255,255,.8) 1px,transparent 1px);background-size:8px 8px}
+  .pcover .disc{width:54px;height:54px;border-radius:50%;background:repeating-radial-gradient(circle,#0c0814 0 3px,#221830 3px 5px);
+    border:5px solid rgba(8,6,13,.5);position:relative;z-index:2;animation:spin 4s linear infinite paused}
+  .player.playing .pcover .disc{animation-play-state:running}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .pmeta{margin-top:12px}
+  .pmeta .pt{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink)}
+  .pmeta .pa{font-size:11px;color:var(--cyan);margin-top:2px}
+  .eq{display:flex;gap:3px;align-items:flex-end;height:22px;margin-top:12px}
+  .eq span{flex:1;background:linear-gradient(180deg,var(--lime),var(--bubblegum));border-radius:2px;height:30%;animation:bounce 1s ease-in-out infinite}
+  .player.playing .eq span{animation-play-state:running}
+  .player:not(.playing) .eq span{animation-play-state:paused;height:14%}
+  .eq span:nth-child(2){animation-delay:.15s}.eq span:nth-child(3){animation-delay:.3s}
+  .eq span:nth-child(4){animation-delay:.45s}.eq span:nth-child(5){animation-delay:.1s}
+  .eq span:nth-child(6){animation-delay:.35s}.eq span:nth-child(7){animation-delay:.25s}
+  .eq span:nth-child(8){animation-delay:.4s}
+  @keyframes bounce{0%,100%{height:18%}50%{height:95%}}
+  .pcontrols{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:14px}
+  .pcontrols button{background:none;border:none;color:var(--ink);font-size:15px;cursor:pointer;transition:.15s}
+  .pcontrols button:hover{color:var(--lime);transform:scale(1.2)}
+  .ppt{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--bubblegum),var(--lilac));
+    color:#fff!important;display:grid;place-items:center;font-size:17px!important;box-shadow:0 6px 18px rgba(255,45,155,.55)}
+  .pmin{position:fixed;bottom:22px;right:22px;z-index:60;width:54px;height:54px;border-radius:50%;display:none;
+    place-items:center;cursor:pointer;border:1px solid rgba(255,255,255,.3);
+    background:linear-gradient(135deg,var(--bubblegum),var(--cyan));box-shadow:0 10px 30px rgba(255,45,155,.5);
+    font-size:20px;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 10px 30px rgba(255,45,155,.5)}50%{box-shadow:0 10px 40px rgba(0,229,255,.7)}}
+  @media(max-width:560px){.player{width:240px;right:12px;bottom:12px}}
+
+  /* sparkles cursor */
+  .spark{position:fixed;pointer-events:none;z-index:55;font-size:14px;animation:sparkfade .8s ease-out forwards}
+  @keyframes sparkfade{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(.3)}}
+
+  /* footer */
+  footer{padding:60px clamp(16px,5vw,64px) 120px;text-align:center;border-top:1px solid rgba(255,45,155,.3);margin-top:40px}
+  footer .fmark{font-family:var(--display);font-weight:900;font-size:clamp(40px,12vw,120px);line-height:.9;
+    background:linear-gradient(90deg,var(--cyan),var(--bubblegum),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-2px}
+  footer p{font-family:var(--mono);font-size:12px;color:#9d8fb5;margin-top:18px;letter-spacing:1px}
+  footer .heart{color:var(--bubblegum)}
+
+  /* ===== EXTRA ANIMATION ===== */
+  /* scroll progress bar */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:50;border:none;
+    background:linear-gradient(90deg,var(--cyan),var(--bubblegum),var(--lime));box-shadow:0 0 12px var(--bubblegum)}
+
+  /* shimmering chrome wordmark */
+  .wordmark .chrome{background-size:100% 300%;animation:shimmer 6s ease-in-out infinite}
+  @keyframes shimmer{0%,100%{background-position:50% 0%}50%{background-position:50% 100%}}
+
+  /* animated brand gradient in nav */
+  .brand{background-size:220% auto;animation:hue 7s linear infinite}
+  @keyframes hue{to{background-position:220% center}}
+
+  /* shine sweep across the main button */
+  .btn-main{position:relative;overflow:hidden}
+  .btn-main::after{content:"";position:absolute;top:0;left:-130%;width:55%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);animation:sweep 3.6s ease-in-out infinite}
+  @keyframes sweep{0%{left:-130%}55%,100%{left:170%}}
+
+  /* gloss sweep over album art on hover */
+  .card .art::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.5) 50%,transparent 68%);transform:translateX(-130%)}
+  .card:hover .art::before{animation:gloss .85s ease}
+  @keyframes gloss{to{transform:translateX(130%)}}
+
+  /* twinkling stars in hero */
+  .stars{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+  .stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;
+    box-shadow:0 0 6px #fff;animation:twinkle 2.6s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{opacity:.12;transform:scale(.6)}50%{opacity:.95;transform:scale(1.35)}}
+
+  /* pulsing play badges */
+  .playbadge{animation:badgepulse 2.4s ease-in-out infinite}
+  @keyframes badgepulse{0%,100%{box-shadow:0 0 0 0 rgba(198,255,31,0)}50%{box-shadow:0 0 0 5px rgba(198,255,31,.12)}}
+
+  /* sparkle burst particles */
+  .burst{position:fixed;pointer-events:none;z-index:58;font-size:18px;animation:burstfly .9s ease-out forwards}
+  @keyframes burstfly{0%{opacity:1;transform:translate(0,0) scale(1) rotate(0)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(.3) rotate(140deg)}}
+
+  /* scroll reveal (only when motion is allowed) */
+  body.motion-ok .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  body.motion-ok .reveal.in{opacity:1;transform:none}
+  body.motion-ok .stagger > *{opacity:0;transform:translateY(22px) scale(.98);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  body.motion-ok .stagger.in > *{opacity:1;transform:none}
+  body.motion-ok .stagger.in > *:nth-child(1){transition-delay:.03s}
+  body.motion-ok .stagger.in > *:nth-child(2){transition-delay:.08s}
+  body.motion-ok .stagger.in > *:nth-child(3){transition-delay:.13s}
+  body.motion-ok .stagger.in > *:nth-child(4){transition-delay:.18s}
+  body.motion-ok .stagger.in > *:nth-child(5){transition-delay:.23s}
+  body.motion-ok .stagger.in > *:nth-child(6){transition-delay:.28s}
+  body.motion-ok .stagger.in > *:nth-child(7){transition-delay:.33s}
+  body.motion-ok .stagger.in > *:nth-child(8){transition-delay:.38s}
+  body.motion-ok .stagger.in > *:nth-child(9){transition-delay:.43s}
+  body.motion-ok .stagger.in > *:nth-child(10){transition-delay:.48s}
+  body.motion-ok .stagger.in > *:nth-child(11){transition-delay:.53s}
+  body.motion-ok .stagger.in > *:nth-child(12){transition-delay:.58s}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+    .marquee .track{animation:none}
+  }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="grain"></div><div class="dotgrid"></div>
+  <div id="progress"></div>
+
+  <div class="wrap">
+    <nav>
+      <div class="brand">★ SUGARCRASH//</div>
+      <div class="navlinks">
+        <a href="#manifesto">manifesto</a>
+        <a href="#artists">artists</a>
+        <a href="#press-play">play</a>
+        <a href="#lexicon">lexicon</a>
+        <a href="#playlist">rotation</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header>
+      <div class="stars" id="stars"></div>
+      <svg class="doodle d1" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z" fill="#C6FF1F"/></svg>
+      <svg class="doodle d2" viewBox="0 0 24 24" fill="none"><path d="M12 5C9 -1 1 3 4 9c1.5 3 8 9 8 9s6.5-6 8-9c3-6-5-10-8-4z" fill="#FF2D9B"/></svg>
+      <svg class="doodle d3" viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z" fill="#00E5FF"/></svg>
+      <svg class="doodle d4" viewBox="0 0 32 24"><path d="M16 12C16 6 8 4 4 8s0 12 12 12 16-8 12-12-12-2-12 4z" fill="#B388FF" opacity=".9"/></svg>
+
+      <span class="eyebrow">internet pop // pitched up // maximalist</span>
+      <h1 class="wordmark" id="wordmark"><span class="chrome">SUGARCRASH</span><span class="slash">//</span></h1>
+      <p class="subhead">A zine + fake web-radio for the <b>pop &amp; hyperpop artists I can't stop playing</b> — from Ayesha Erotica and Slayyyter to Gaga, Ariana, Doja and the rest of the rotation.</p>
+      <div class="herobtns">
+        <button class="btn btn-main" id="playGenre">▶ play the genre</button>
+        <a href="#artists" class="btn btn-ghost">meet the rotation →</a>
+      </div>
+    </header>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="track" id="mq">
+        <span>HYPERPOP</span><span class="star">✦</span><span>BUBBLEGUM BASS</span><span class="star">✦</span><span>PC MUSIC</span><span class="star">✦</span><span>Y2K REVIVAL</span><span class="star">✦</span><span>GLITCHCORE</span><span class="star">✦</span><span>THE DROP</span><span class="star">✦</span><span>AUTOTUNE</span><span class="star">✦</span><span>DIGICORE</span><span class="star">✦</span>
+        <span>HYPERPOP</span><span class="star">✦</span><span>BUBBLEGUM BASS</span><span class="star">✦</span><span>PC MUSIC</span><span class="star">✦</span><span>Y2K REVIVAL</span><span class="star">✦</span><span>GLITCHCORE</span><span class="star">✦</span><span>THE DROP</span><span class="star">✦</span><span>AUTOTUNE</span><span class="star">✦</span><span>DIGICORE</span><span class="star">✦</span>
+      </div>
+    </div>
+
+    <!-- MANIFESTO -->
+    <section class="sec manifesto" id="manifesto">
+      <div class="seclabel">what is this</div>
+      <h2 class="sectitle">Pop, but <em>maxed&nbsp;out.</em></h2>
+      <p>Hyperpop takes everything pop is usually shy about — the <span class="hl">sugar</span>, the cheese, the volume — and slams the dial to 200%. Vocals get <span class="hl3">pitched into the clouds</span>, basslines turn to <span class="hl2">glittering shrapnel</span>, and the whole thing sounds like a candy store crashing through a server farm. It's internet-native, gloriously plastic, and proudly too much.</p>
+    </section>
+
+    <!-- ARTISTS -->
+    <section class="sec" id="artists">
+      <div class="seclabel">on heavy rotation</div>
+      <h2 class="sectitle">The ones I <em>can't stop playing.</em></h2>
+      <div class="grid stagger">
+
+        <article class="card">
+          <div class="art a1"><span class="eratag">blueprint</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Ayesha Erotica</h3>
+            <p>Patron saint of campy, filthy, bedroom-built maximalism. A cult internet figure whose early tracks became a template a whole generation openly copied.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a2"><span class="eratag">y2k pop</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Slayyyter</h3>
+            <p>Glossy, knowing, terminally-online pop that runs 2000s nostalgia through a modern hyper-glazed filter. The diva energy is fully intentional.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a3"><span class="eratag">icon</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Lady Gaga</h3>
+            <p>The shape-shifting maximalist who swings from arena dance-pop to jazz to film and makes all of it feel theatrical. The original pop provocateur for a lot of this scene.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a4"><span class="eratag">powerhouse</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Ariana Grande</h3>
+            <p>Whistle-tone powerhouse welding airy R&amp;B to glossy pop — one of the defining voices of the streaming era.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a5"><span class="eratag">gen-z pop</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Tate McRae</h3>
+            <p>Dance-pop built on breathy hooks and full-on choreography — pop-star-as-performer energy, dialed all the way up.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a6"><span class="eratag">shapeshifter</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Doja Cat</h3>
+            <p>Genre-fluid shapeshifter — equal parts rapper, pop vocalist and internet provocateur. Impossible to pin down, which is the whole point.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a7"><span class="eratag">dance-pop</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Zara Larsson</h3>
+            <p>Swedish dance-pop with stadium-sized hooks — sleek, bright, and engineered for the chorus.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a8"><span class="eratag">crossover</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Charli xcx</h3>
+            <p>The experimental wing's crossover star, proving the avant-garde and the charts were never actually that far apart.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a9"><span class="eratag">flamboyant</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Dorian Electra</h3>
+            <p>Genderfluid, theatrical hyperpop provocateur — over-the-top in the best way, turning identity and camp into maximalist spectacle.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="art a10"><span class="eratag">pop</span><span class="playbadge">▶</span></div>
+          <div class="cardbody">
+            <h3>Addison Rae</h3>
+            <p>The rare jump from viral internet fame to a genuinely respected pop act — sleek, breathy, slightly experimental pop with one foot in the hyperpop scene.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- PRESS PLAY (real embeds) -->
+    <section class="sec" id="press-play">
+      <div class="seclabel">real audio</div>
+      <h2 class="sectitle">Press <em>play.</em></h2>
+      <p style="color:#cbbce0;max-width:660px;font-size:15px">Official Spotify players — actual music, streamed legally straight from Spotify. Nothing is hosted here.</p>
+      <div class="players stagger">
+        <div class="pframe"><h4>★ Ayesha Erotica</h4><iframe src="https://open.spotify.com/embed/artist/7M5pDtJpCdnftEQZtczYco?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Slayyyter</h4><iframe src="https://open.spotify.com/embed/artist/4QM5QCHicznALtX885CnZC?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Lady Gaga</h4><iframe src="https://open.spotify.com/embed/artist/1HY2Jd0NmPuamShAr6KMms?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Ariana Grande</h4><iframe src="https://open.spotify.com/embed/artist/66CXWjxzNUsdJxJ2JdwvnR?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Tate McRae</h4><iframe src="https://open.spotify.com/embed/artist/45dkTj5sMRSjrmBSBeiHym?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Doja Cat</h4><iframe src="https://open.spotify.com/embed/artist/5cj0lLjcoR7YOSnhnX0Po5?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Zara Larsson</h4><iframe src="https://open.spotify.com/embed/artist/1Xylc3o4UrD53lo9CvFvVg?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Charli xcx</h4><iframe src="https://open.spotify.com/embed/artist/25uiPmTg16RbhZWAqwLBy5?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Dorian Electra</h4><iframe src="https://open.spotify.com/embed/artist/202HZzqKvPsMHcbwnDZx7u?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Addison Rae</h4><iframe src="https://open.spotify.com/embed/artist/4gvjmrtzydbMpyJaXUtwvP?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+      </div>
+      <p class="sandboxnote">⚠ Heads up: if the players look blank in the <b>in-chat preview</b>, that's just the preview sandbox blocking outside players. <b>Download the file and open it in a browser</b> (or host it) and they'll play perfectly. Click ▶ on any track for a preview; log into Spotify in that browser for full songs.</p>
+    </section>
+
+    <!-- LEXICON -->
+    <section class="sec" id="lexicon">
+      <div class="seclabel">field guide</div>
+      <h2 class="sectitle">Speak the <em>dialect.</em></h2>
+      <dl class="lex stagger">
+        <div class="term"><dt>Pitched-up vocals</dt><dd>Voices sped and lifted until they sound part-human, part-software. The signature texture.</dd></div>
+        <div class="term"><dt>Bubblegum bass</dt><dd>An early name for the sound: sugary melodies welded onto detuned, distorted low end.</dd></div>
+        <div class="term"><dt>The drop</dt><dd>The moment the candy coating cracks and everything blows out into glorious noise.</dd></div>
+        <div class="term"><dt>PC Music</dt><dd>The London collective whose hyper-glossy, ironic pop seeded much of the aesthetic.</dd></div>
+        <div class="term"><dt>Y2K revival</dt><dd>Chrome, butterflies, low-rise nostalgia for an internet that felt newer and shinier.</dd></div>
+        <div class="term"><dt>Digicore</dt><dd>The younger, rap-leaning, SoundCloud-born cousin sharing the same glitchy DNA.</dd></div>
+        <div class="term"><dt>Maximalism</dt><dd>The core philosophy: more layers, more sugar, more volume. Restraint is the enemy.</dd></div>
+        <div class="term"><dt>Glitchcore</dt><dd>Aesthetic of intentional digital breakage — corrupted, stuttering, beautifully broken.</dd></div>
+      </dl>
+    </section>
+
+    <!-- PLAYLIST -->
+    <section class="sec" id="playlist">
+      <div class="seclabel">queue it up</div>
+      <h2 class="sectitle">My <em>rotation.</em></h2>
+      <p style="color:#cbbce0;max-width:660px;font-size:15px">Every name links straight out to Spotify and YouTube. <span style="color:var(--cyan)">Preview</span> loads them into the little player in the corner.</p>
+      <div class="playlist stagger" id="pl">
+
+        <div class="plrow"><span class="plnum">01</span>
+          <div><div class="pltitle">Ayesha Erotica</div><div class="plartist">the blueprint</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Ayesha Erotica">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Ayesha%20Erotica">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Ayesha%20Erotica">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Ayesha+Erotica">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">02</span>
+          <div><div class="pltitle">Slayyyter</div><div class="plartist">y2k maximalist</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Slayyyter">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Slayyyter">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Slayyyter">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Slayyyter">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">03</span>
+          <div><div class="pltitle">Lady Gaga</div><div class="plartist">the icon</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Lady Gaga">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Lady%20Gaga">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Lady%20Gaga">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Lady+Gaga">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">04</span>
+          <div><div class="pltitle">Ariana Grande</div><div class="plartist">the powerhouse</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Ariana Grande">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Ariana%20Grande">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Ariana%20Grande">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Ariana+Grande">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">05</span>
+          <div><div class="pltitle">Tate McRae</div><div class="plartist">gen-z pop</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Tate McRae">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Tate%20McRae">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Tate%20McRae">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Tate+McRae">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">06</span>
+          <div><div class="pltitle">Doja Cat</div><div class="plartist">the shapeshifter</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Doja Cat">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Doja%20Cat">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Doja%20Cat">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Doja+Cat">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">07</span>
+          <div><div class="pltitle">Zara Larsson</div><div class="plartist">dance-pop</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Zara Larsson">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Zara%20Larsson">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Zara%20Larsson">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Zara+Larsson">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">08</span>
+          <div><div class="pltitle">Charli xcx</div><div class="plartist">the crossover</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Charli xcx">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Charli%20XCX">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Charli%20XCX">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Charli+XCX">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">09</span>
+          <div><div class="pltitle">Dorian Electra</div><div class="plartist">flamboyant hyperpop</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Dorian Electra">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Dorian%20Electra">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Dorian%20Electra">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Dorian+Electra">youtube ↗</a>
+          </div>
+        </div>
+
+        <div class="plrow"><span class="plnum">10</span>
+          <div><div class="pltitle">Addison Rae</div><div class="plartist">internet-to-pop</div></div>
+          <div class="pllinks">
+            <button class="linkpill pv" data-artist="Addison Rae">▶ preview</button>
+            <a class="linkpill sp" target="_blank" rel="noopener" href="https://open.spotify.com/search/Addison%20Rae">spotify ↗</a>
+            <a class="linkpill am" target="_blank" rel="noopener" href="https://music.apple.com/us/search?term=Addison%20Rae">apple ↗</a>
+            <a class="linkpill yt" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Addison+Rae">youtube ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer>
+      <div class="fmark">CRASH OUT ♡</div>
+      <p>SUGARCRASH// is a fan-made zine concept · no audio is hosted here · built with <span class="heart">♥</span> for hyperpop</p>
+    </footer>
+  </div>
+
+  <!-- MEDIA PLAYER -->
+  <div class="player" id="player">
+    <div class="pbar" id="dragbar">
+      <span class="ttl">★ now playing</span>
+      <span class="pbtns"><i></i><i id="minBtn" style="cursor:pointer"></i></span>
+    </div>
+    <div class="pbody">
+      <div class="pcover"><div class="disc"></div></div>
+      <div class="pmeta">
+        <div class="pt" id="trackName">now playing…</div>
+        <div class="pa" id="trackArtist">— my rotation —</div>
+      </div>
+      <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="pcontrols">
+        <button id="prev" aria-label="previous">◀◀</button>
+        <button class="ppt" id="toggle" aria-label="play / pause">▶</button>
+        <button id="next" aria-label="next">▶▶</button>
+      </div>
+    </div>
+  </div>
+  <div class="pmin" id="restoreBtn" title="open player">★</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* glitch wordmark */
+  var wm = document.getElementById('wordmark');
+  function glitch(){ if(reduce) return; wm.classList.add('glitch'); setTimeout(function(){wm.classList.remove('glitch');},360); }
+  wm.addEventListener('mouseenter', glitch);
+  if(!reduce) setInterval(function(){ if(Math.random()>.6) glitch(); }, 3200);
+
+  /* fake player state */
+  var player = document.getElementById('player');
+  var toggle = document.getElementById('toggle');
+  var tracks = [
+    {t:'now playing…',     a:'— my rotation —'},
+    {t:'blueprint.exe',    a:'ayesha erotica'},
+    {t:'chrome heart',     a:'slayyyter'},
+    {t:'arena mode',       a:'lady gaga'},
+    {t:'whistle tone',     a:'ariana grande'},
+    {t:'breathy hook',     a:'tate mcrae'},
+    {t:'shapeshift',       a:'doja cat'},
+    {t:'stadium chorus',   a:'zara larsson'},
+    {t:'avant-pop',        a:'charli xcx'},
+    {t:'flamboyant.exe',   a:'dorian electra'},
+    {t:'internet star',    a:'addison rae'}
+  ];
+  var idx = 0, playing = false;
+  var nameEl = document.getElementById('trackName');
+  var artistEl = document.getElementById('trackArtist');
+
+  // tiny synth blip via WebAudio (no copyrighted audio)
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var actx = null;
+  function blip(freq){
+    if(reduce) return;
+    try{
+      if(!actx) actx = new AC();
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.type='square'; o.frequency.value=freq||660;
+      o.connect(g); g.connect(actx.destination);
+      g.gain.setValueAtTime(.05, actx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime+.18);
+      o.start(); o.stop(actx.currentTime+.18);
+    }catch(e){}
+  }
+  function setPlaying(on){
+    playing = on;
+    player.classList.toggle('playing', on);
+    toggle.textContent = on ? '❚❚' : '▶';
+  }
+  function load(i){
+    idx = (i+tracks.length)%tracks.length;
+    nameEl.textContent = tracks[idx].t;
+    artistEl.textContent = tracks[idx].a;
+  }
+  toggle.addEventListener('click', function(){ setPlaying(!playing); blip(playing?700:440); });
+  document.getElementById('next').addEventListener('click', function(){ load(idx+1); blip(820); if(!playing) setPlaying(true); });
+  document.getElementById('prev').addEventListener('click', function(){ load(idx-1); blip(520); if(!playing) setPlaying(true); });
+  document.getElementById('playGenre').addEventListener('click', function(){ load(1); setPlaying(true); blip(660); player.scrollIntoView&&0; });
+
+  function loadArtist(name){
+    for(var k=0;k<tracks.length;k++){ if(tracks[k].a.toLowerCase()===name.toLowerCase()){ load(k); setPlaying(true); blip(700); return; } }
+    artistEl.textContent = name; nameEl.textContent='live set'; setPlaying(true); blip(700);
+  }
+  document.querySelectorAll('#artists .card').forEach(function(c){
+    c.addEventListener('click', function(){ loadArtist(c.querySelector('h3').textContent); });
+  });
+  document.querySelectorAll('.pv').forEach(function(b){
+    b.addEventListener('click', function(){ loadArtist(b.getAttribute('data-artist')); });
+  });
+
+  /* minimize / restore */
+  var minBtn = document.getElementById('minBtn');
+  var restore = document.getElementById('restoreBtn');
+  minBtn.addEventListener('click', function(e){ e.stopPropagation(); player.style.display='none'; restore.style.display='grid'; });
+  restore.addEventListener('click', function(){ player.style.display='block'; restore.style.display='none'; });
+
+  /* draggable window */
+  var bar = document.getElementById('dragbar');
+  var dragging=false, ox=0, oy=0, sx=0, sy=0, placed=false;
+  function start(x,y){ dragging=true; placed=true; player.classList.add('dragging');
+    var r=player.getBoundingClientRect();
+    player.style.left=r.left+'px'; player.style.top=r.top+'px'; player.style.right='auto'; player.style.bottom='auto';
+    ox=x-r.left; oy=y-r.top; }
+  function move(x,y){ if(!dragging) return;
+    var nx=Math.max(4,Math.min(window.innerWidth-player.offsetWidth-4, x-ox));
+    var ny=Math.max(4,Math.min(window.innerHeight-player.offsetHeight-4, y-oy));
+    player.style.left=nx+'px'; player.style.top=ny+'px'; }
+  function end(){ dragging=false; player.classList.remove('dragging'); }
+  bar.addEventListener('mousedown', function(e){ if(e.target===minBtn) return; start(e.clientX,e.clientY); });
+  window.addEventListener('mousemove', function(e){ move(e.clientX,e.clientY); });
+  window.addEventListener('mouseup', end);
+  bar.addEventListener('touchstart', function(e){ if(e.target===minBtn) return; var t=e.touches[0]; start(t.clientX,t.clientY); }, {passive:true});
+  window.addEventListener('touchmove', function(e){ if(dragging){ var t=e.touches[0]; move(t.clientX,t.clientY); } }, {passive:true});
+  window.addEventListener('touchend', end);
+
+  /* sparkle cursor trail */
+  var glyphs=['✦','✧','♡','★','✶'];
+  var cols=['#FF2D9B','#C6FF1F','#00E5FF','#B388FF'];
+  var last=0;
+  if(!reduce){
+    window.addEventListener('mousemove', function(e){
+      var now=Date.now(); if(now-last<55) return; last=now;
+      var s=document.createElement('span'); s.className='spark';
+      s.textContent=glyphs[(Math.random()*glyphs.length)|0];
+      s.style.left=(e.clientX-6)+'px'; s.style.top=(e.clientY-6)+'px';
+      s.style.color=cols[(Math.random()*cols.length)|0];
+      document.body.appendChild(s);
+      setTimeout(function(){ s.remove(); }, 800);
+    });
+  }
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var motionOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* scroll progress bar (cheap, always on) */
+  var bar = document.getElementById('progress');
+  function prog(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max>0 ? (h.scrollTop/max*100) : 0) + '%';
+  }
+  window.addEventListener('scroll', prog, {passive:true});
+  window.addEventListener('resize', prog); prog();
+
+  if(!motionOk) return; /* everything below is decorative */
+  document.body.classList.add('motion-ok');
+
+  /* tag headings + intros for reveal, grids already have .stagger */
+  document.querySelectorAll('.seclabel,.sectitle,.manifesto p,.sec > p:not(.sandboxnote)')
+    .forEach(function(el){ el.classList.add('reveal'); });
+
+  /* reveal on scroll */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal,.stagger').forEach(function(el){ io.observe(el); });
+
+  /* twinkling stars in hero */
+  var starbox = document.getElementById('stars');
+  if(starbox){
+    for(var s=0;s<24;s++){
+      var i=document.createElement('i');
+      i.style.left=(Math.random()*100)+'%';
+      i.style.top=(Math.random()*100)+'%';
+      i.style.animationDelay=(Math.random()*2.6)+'s';
+      i.style.animationDuration=(2+Math.random()*2.5)+'s';
+      starbox.appendChild(i);
+    }
+  }
+
+  /* sparkle burst on play actions */
+  var bits=['✦','✧','♡','★','✶','💖'];
+  var cols=['#FF2D9B','#C6FF1F','#00E5FF','#B388FF'];
+  function burst(x,y){
+    for(var k=0;k<8;k++){
+      var p=document.createElement('span'); p.className='burst';
+      p.textContent=bits[(Math.random()*bits.length)|0];
+      p.style.left=x+'px'; p.style.top=y+'px';
+      p.style.color=cols[(Math.random()*cols.length)|0];
+      var ang=Math.random()*Math.PI*2, dist=40+Math.random()*70;
+      p.style.setProperty('--bx',(Math.cos(ang)*dist)+'px');
+      p.style.setProperty('--by',(Math.sin(ang)*dist)+'px');
+      document.body.appendChild(p);
+      setTimeout((function(n){return function(){n.remove();};})(p),900);
+    }
+  }
+  function burstFrom(el){
+    var r=el.getBoundingClientRect();
+    burst(r.left+r.width/2, r.top+r.height/2);
+  }
+  ['#playGenre','#toggle'].forEach(function(sel){
+    var el=document.querySelector(sel);
+    if(el) el.addEventListener('click', function(){ burstFrom(el); });
+  });
+  document.querySelectorAll('.pv,.playbadge').forEach(function(el){
+    el.addEventListener('click', function(){ burstFrom(el); });
+  });
+
+  /* subtle mouse parallax on the hero wordmark */
+  var wm=document.getElementById('wordmark');
+  var hero=document.querySelector('header');
+  if(wm && hero){
+    hero.addEventListener('mousemove', function(e){
+      var cx=window.innerWidth/2, cy=window.innerHeight/2;
+      wm.style.transform='translate('+((e.clientX-cx)/cx*8)+'px,'+((e.clientY-cy)/cy*6)+'px)';
+    });
+    hero.addEventListener('mouseleave', function(){ wm.style.transform=''; });
+  }
+})();
+</script>
+</body>
+</html>
