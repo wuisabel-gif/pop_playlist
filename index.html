@@ -477,16 +477,16 @@
       <h2 class="sectitle">Press <em>play.</em></h2>
       <p style="color:#cbbce0;max-width:660px;font-size:15px">Official Spotify players — actual music, streamed legally straight from Spotify. Nothing is hosted here.</p>
       <div class="players stagger">
-        <div class="pframe"><h4>★ Ayesha Erotica</h4><iframe src="https://open.spotify.com/embed/artist/7M5pDtJpCdnftEQZtczYco?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Slayyyter</h4><iframe src="https://open.spotify.com/embed/artist/4QM5QCHicznALtX885CnZC?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Lady Gaga</h4><iframe src="https://open.spotify.com/embed/artist/1HY2Jd0NmPuamShAr6KMms?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Ariana Grande</h4><iframe src="https://open.spotify.com/embed/artist/66CXWjxzNUsdJxJ2JdwvnR?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Tate McRae</h4><iframe src="https://open.spotify.com/embed/artist/45dkTj5sMRSjrmBSBeiHym?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Doja Cat</h4><iframe src="https://open.spotify.com/embed/artist/5cj0lLjcoR7YOSnhnX0Po5?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Zara Larsson</h4><iframe src="https://open.spotify.com/embed/artist/1Xylc3o4UrD53lo9CvFvVg?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Charli xcx</h4><iframe src="https://open.spotify.com/embed/artist/25uiPmTg16RbhZWAqwLBy5?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Dorian Electra</h4><iframe src="https://open.spotify.com/embed/artist/202HZzqKvPsMHcbwnDZx7u?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
-        <div class="pframe"><h4>★ Addison Rae</h4><iframe src="https://open.spotify.com/embed/artist/4gvjmrtzydbMpyJaXUtwvP?utm_source=generator" height="152" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>
+        <div class="pframe"><h4>★ Ayesha Erotica</h4><div class="spembed" data-uri="spotify:artist:7M5pDtJpCdnftEQZtczYco"></div></div>
+        <div class="pframe"><h4>★ Slayyyter</h4><div class="spembed" data-uri="spotify:artist:4QM5QCHicznALtX885CnZC"></div></div>
+        <div class="pframe"><h4>★ Lady Gaga</h4><div class="spembed" data-uri="spotify:artist:1HY2Jd0NmPuamShAr6KMms"></div></div>
+        <div class="pframe"><h4>★ Ariana Grande</h4><div class="spembed" data-uri="spotify:artist:66CXWjxzNUsdJxJ2JdwvnR"></div></div>
+        <div class="pframe"><h4>★ Tate McRae</h4><div class="spembed" data-uri="spotify:artist:45dkTj5sMRSjrmBSBeiHym"></div></div>
+        <div class="pframe"><h4>★ Doja Cat</h4><div class="spembed" data-uri="spotify:artist:5cj0lLjcoR7YOSnhnX0Po5"></div></div>
+        <div class="pframe"><h4>★ Zara Larsson</h4><div class="spembed" data-uri="spotify:artist:1Xylc3o4UrD53lo9CvFvVg"></div></div>
+        <div class="pframe"><h4>★ Charli xcx</h4><div class="spembed" data-uri="spotify:artist:25uiPmTg16RbhZWAqwLBy5"></div></div>
+        <div class="pframe"><h4>★ Dorian Electra</h4><div class="spembed" data-uri="spotify:artist:202HZzqKvPsMHcbwnDZx7u"></div></div>
+        <div class="pframe"><h4>★ Addison Rae</h4><div class="spembed" data-uri="spotify:artist:4gvjmrtzydbMpyJaXUtwvP"></div></div>
       </div>
       <p class="sandboxnote">⚠ Heads up: if the players look blank in the <b>in-chat preview</b>, that's just the preview sandbox blocking outside players. <b>Download the file and open it in a browser</b> (or host it) and they'll play perfectly. Click ▶ on any track for a preview; log into Spotify in that browser for full songs.</p>
     </section>
@@ -848,6 +848,26 @@
     hero.addEventListener('mouseleave', function(){ wm.style.transform=''; });
   }
 })();
+
+/* ===== Spotify embeds: only one plays at a time =====
+   Plain <iframe> embeds can't be controlled cross-origin, so we mount them
+   via Spotify's official IFrame API and pause the previously-playing one
+   whenever a new embed starts. */
+window.onSpotifyIframeApiReady = function(IFrameAPI){
+  var active = null;
+  document.querySelectorAll('.spembed').forEach(function(el){
+    IFrameAPI.createController(el, { uri: el.getAttribute('data-uri'), height: 152 }, function(ctrl){
+      ctrl.addListener('playback_update', function(e){
+        // isPaused === false means this embed just started / resumed playback
+        if(e && e.data && e.data.isPaused === false){
+          if(active && active !== ctrl){ active.pause(); }
+          active = ctrl;
+        }
+      });
+    });
+  });
+};
 </script>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
