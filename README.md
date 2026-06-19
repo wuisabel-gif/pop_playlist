@@ -1,7 +1,5 @@
 # SUGARCRASH//
 
-> A maximalist Y2K-cyber fan zine and fake web-radio for the pop & hyperpop artists I can't stop playing.
-
 ## What it is
 
 A single-page fan site celebrating a personal rotation of pop and hyperpop artists. It pairs a loud, candy-coated, glitchy aesthetic with real, legal music playback via official Spotify players. There's no build step, no framework, and nothing to install — it's one self-contained HTML file.
