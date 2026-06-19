@@ -1,0 +1,167 @@
+/* ============================================================
+   POP DOSSIER — shared stylesheet
+   A Y2K "fan dossier" identity for an artist database.
+   Per-page accent is set via --accent / --accent-2 on <body>.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#0a0710;
+  --bg-2:#120b1c;
+  --panel:#160e22;
+  --line:rgba(255,255,255,.10);
+  --ink:#f4eefb;
+  --ink-dim:#b3a6c6;
+  --ink-faint:#7b6e92;
+  /* defaults — overridden per page */
+  --accent:#ff2d9b;
+  --accent-2:#22e0d6;
+  --radius:18px;
+  --maxw:980px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 55%),
+    linear-gradient(180deg,var(--bg-2),var(--bg) 40%);
+  color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif;
+  line-height:1.6;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* faint scanline atmosphere — the Y2K signature, kept very subtle */
+body::before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);
+  mix-blend-mode:overlay;opacity:.5;
+}
+
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:18px 22px;max-width:var(--maxw);margin:0 auto;position:relative;z-index:2;
+  font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+}
+.topbar a{color:var(--ink);text-decoration:none}
+.wordmark{display:inline-flex;align-items:center;gap:9px;font-weight:700}
+.wordmark .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent)}
+.file-tag{color:var(--ink-faint)}
+.file-tag b{color:var(--accent-2)}
+
+/* ---------- hero ---------- */
+.hero{padding:34px 0 22px}
+.eyebrow{
+  font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--accent-2);display:flex;align-items:center;gap:12px;margin:0 0 18px;
+}
+.eyebrow::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--accent-2),transparent)}
+
+.name{
+  font-family:"Syne",sans-serif;font-weight:800;
+  font-size:clamp(3rem,12vw,7rem);line-height:.92;letter-spacing:-.02em;margin:0;
+  text-transform:uppercase;
+  background:linear-gradient(180deg,#fff, color-mix(in srgb,var(--accent) 60%, #fff) 140%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 50px color-mix(in srgb,var(--accent) 30%, transparent);
+}
+.name .glitch{position:relative;display:inline-block}
+.name .glitch::after{
+  content:attr(data-t);position:absolute;left:2px;top:0;color:var(--accent-2);
+  opacity:.5;mix-blend-mode:screen;transform:translate(2px,-1px);z-index:-1;
+}
+.tagline{
+  margin:20px 0 0;max-width:60ch;color:var(--ink-dim);font-size:clamp(1rem,2.4vw,1.18rem);
+}
+.tagline b{color:var(--ink);font-weight:600}
+
+/* ---------- stat strip ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:34px 0 10px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+}
+.stat{background:var(--panel);padding:20px 20px 18px}
+.stat .k{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint)}
+.stat .v{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(1.5rem,5vw,2.5rem);line-height:1.05;margin-top:8px}
+.stat .v small{display:block;font-family:"Inter";font-weight:500;font-size:.8rem;color:var(--ink-dim);letter-spacing:0;margin-top:6px}
+.stat:nth-child(2) .v{color:var(--accent)}
+.stat:nth-child(3) .v{color:var(--accent-2)}
+
+/* ---------- sections ---------- */
+section{padding:42px 0;border-top:1px solid var(--line)}
+.sec-head{
+  font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-faint);margin:0 0 22px;display:flex;align-items:baseline;gap:14px;
+}
+.sec-head .num{color:var(--accent);font-weight:700}
+.sec-head h2{
+  font-family:"Syne";font-weight:700;text-transform:none;letter-spacing:-.01em;
+  font-size:clamp(1.3rem,3.4vw,1.7rem);color:var(--ink);margin:0;
+}
+
+/* aliases */
+.alias-grid{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  border:1px solid color-mix(in srgb,var(--accent) 45%, var(--line));
+  background:color-mix(in srgb,var(--accent) 9%, transparent);
+  color:var(--ink);border-radius:999px;padding:9px 16px;font-size:.92rem;
+  font-family:"Space Mono",monospace;letter-spacing:.02em;
+}
+.chip .lbl{color:var(--accent-2);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;margin-right:8px}
+.alias-note{margin:18px 0 0;color:var(--ink-faint);font-size:.92rem}
+
+/* discography spine */
+.disco{list-style:none;margin:0;padding:0;position:relative}
+.disco::before{content:"";position:absolute;left:78px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.rel{display:grid;grid-template-columns:78px 1fr;gap:20px;padding:11px 0;position:relative}
+.rel .yr{font-family:"Space Mono",monospace;font-weight:700;color:var(--accent-2);font-size:.95rem;text-align:right;padding-top:2px}
+.rel::after{content:"";position:absolute;left:75px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
+.rel .t{font-family:"Syne";font-weight:700;font-size:1.06rem}
+.rel .meta{color:var(--ink-faint);font-family:"Space Mono",monospace;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.rel.up .t::after{content:"UPCOMING";margin-left:10px;font-family:"Space Mono";font-size:.6rem;letter-spacing:.14em;color:var(--accent);border:1px solid var(--accent);padding:2px 7px;border-radius:999px;vertical-align:middle}
+
+/* profile prose */
+.profile p{margin:0 0 16px;max-width:68ch;color:var(--ink-dim)}
+.profile p b{color:var(--ink);font-weight:600}
+.profile p:first-child::first-letter{
+  font-family:"Syne";font-weight:800;float:left;font-size:3.4rem;line-height:.8;
+  padding:6px 12px 0 0;color:var(--accent);
+}
+
+/* footer */
+.foot{
+  border-top:1px solid var(--line);margin-top:10px;padding:30px 0 60px;
+  font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-faint);
+  display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between;
+}
+.foot .note{max-width:52ch;text-transform:none;letter-spacing:.02em;line-height:1.5}
+
+a.back{color:var(--accent-2);text-decoration:none}
+a.back:hover{text-decoration:underline}
+
+/* motion + a11y */
+@media (prefers-reduced-motion:no-preference){
+  .name{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .stat{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+  .stat:nth-child(2){animation-delay:.06s}
+  .stat:nth-child(3){animation-delay:.12s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px;border-radius:4px}
+
+@media (max-width:560px){
+  .stats{grid-template-columns:1fr}
+  .disco::before{left:58px}
+  .rel{grid-template-columns:58px 1fr;gap:14px}
+  .rel::after{left:55px}
+  .topbar{font-size:10px;padding:14px 18px}
+}
