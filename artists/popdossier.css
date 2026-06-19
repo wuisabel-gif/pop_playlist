@@ -4,20 +4,20 @@
    Per-page accent is set via --accent / --accent-2 on <body>.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap');
 
 :root{
-  --bg:#0a0710;
-  --bg-2:#120b1c;
+  /* aligned with the SUGARCRASH// home theme */
+  --bg:#08060d;
+  --bg-2:#0f0a18;
   --panel:#160e22;
   --line:rgba(255,255,255,.10);
-  --ink:#f4eefb;
-  --ink-dim:#b3a6c6;
-  --ink-faint:#7b6e92;
-  /* defaults — overridden per page */
-  --accent:#ff2d9b;
-  --accent-2:#22e0d6;
-  --radius:18px;
+  --ink:#f6e9ff;
+  --ink-dim:#cbbce0;
+  --ink-faint:#8a7ba6;
+  /* defaults — overridden per page with the main palette */
+  --accent:#FF2D9B;   /* bubblegum */
+  --accent-2:#00E5FF; /* cyan */
+  --radius:16px;
   --maxw:980px;
 }
 
@@ -30,7 +30,7 @@ body{
     radial-gradient(900px 500px at -10% 10%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 55%),
     linear-gradient(180deg,var(--bg-2),var(--bg) 40%);
   color:var(--ink);
-  font-family:"Inter",system-ui,sans-serif;
+  font-family:'Space Grotesk',system-ui,sans-serif;
   line-height:1.6;
   min-height:100vh;
   overflow-x:hidden;
@@ -67,7 +67,7 @@ body::before{
 .eyebrow::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--accent-2),transparent)}
 
 .name{
-  font-family:"Syne",sans-serif;font-weight:800;
+  font-family:'Unbounded',sans-serif;font-weight:900;
   font-size:clamp(3rem,12vw,7rem);line-height:.92;letter-spacing:-.02em;margin:0;
   text-transform:uppercase;
   background:linear-gradient(180deg,#fff, color-mix(in srgb,var(--accent) 60%, #fff) 140%);
@@ -91,8 +91,8 @@ body::before{
 }
 .stat{background:var(--panel);padding:20px 20px 18px}
 .stat .k{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint)}
-.stat .v{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(1.5rem,5vw,2.5rem);line-height:1.05;margin-top:8px}
-.stat .v small{display:block;font-family:"Inter";font-weight:500;font-size:.8rem;color:var(--ink-dim);letter-spacing:0;margin-top:6px}
+.stat .v{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(1.5rem,5vw,2.5rem);line-height:1.05;margin-top:8px}
+.stat .v small{display:block;font-family:'Space Grotesk';font-weight:500;font-size:.8rem;color:var(--ink-dim);letter-spacing:0;margin-top:6px}
 .stat:nth-child(2) .v{color:var(--accent)}
 .stat:nth-child(3) .v{color:var(--accent-2)}
 
@@ -104,7 +104,7 @@ section{padding:42px 0;border-top:1px solid var(--line)}
 }
 .sec-head .num{color:var(--accent);font-weight:700}
 .sec-head h2{
-  font-family:"Syne";font-weight:700;text-transform:none;letter-spacing:-.01em;
+  font-family:'Unbounded';font-weight:700;text-transform:none;letter-spacing:-.01em;
   font-size:clamp(1.3rem,3.4vw,1.7rem);color:var(--ink);margin:0;
 }
 
@@ -125,7 +125,7 @@ section{padding:42px 0;border-top:1px solid var(--line)}
 .rel{display:grid;grid-template-columns:78px 1fr;gap:20px;padding:11px 0;position:relative}
 .rel .yr{font-family:"Space Mono",monospace;font-weight:700;color:var(--accent-2);font-size:.95rem;text-align:right;padding-top:2px}
 .rel::after{content:"";position:absolute;left:75px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
-.rel .t{font-family:"Syne";font-weight:700;font-size:1.06rem}
+.rel .t{font-family:'Unbounded';font-weight:700;font-size:1.06rem}
 .rel .meta{color:var(--ink-faint);font-family:"Space Mono",monospace;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
 .rel.up .t::after{content:"UPCOMING";margin-left:10px;font-family:"Space Mono";font-size:.6rem;letter-spacing:.14em;color:var(--accent);border:1px solid var(--accent);padding:2px 7px;border-radius:999px;vertical-align:middle}
 
@@ -133,7 +133,7 @@ section{padding:42px 0;border-top:1px solid var(--line)}
 .profile p{margin:0 0 16px;max-width:68ch;color:var(--ink-dim)}
 .profile p b{color:var(--ink);font-weight:600}
 .profile p:first-child::first-letter{
-  font-family:"Syne";font-weight:800;float:left;font-size:3.4rem;line-height:.8;
+  font-family:'Unbounded';font-weight:900;float:left;font-size:3.4rem;line-height:.8;
   padding:6px 12px 0 0;color:var(--accent);
 }
 
