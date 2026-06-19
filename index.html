@@ -854,12 +854,14 @@
   function fitWordmark(){
     if(!wm) return;
     wm.style.fontSize='';                 // reset to the CSS clamp() value
-    var avail = wm.clientWidth;
-    if(!avail) return;
-    var actual = wm.scrollWidth;          // true text width (incl. overflow)
-    if(actual > avail){
+    var parent = wm.parentElement;        // header — the wordmark is centered inside it
+    if(!parent) return;
+    var cs = getComputedStyle(parent);
+    var avail = parent.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var actual = wm.getBoundingClientRect().width;   // real rendered width of the word
+    if(avail > 0 && actual > avail){
       var cur = parseFloat(getComputedStyle(wm).fontSize);
-      wm.style.fontSize = Math.floor(cur * (avail/actual) * 0.96) + 'px';
+      wm.style.fontSize = Math.floor(cur * (avail/actual) * 0.97) + 'px';
     }
   }
   fitWordmark();
