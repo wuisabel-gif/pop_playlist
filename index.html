@@ -837,8 +837,25 @@
     el.addEventListener('click', function(){ burstFrom(el); });
   });
 
-  /* subtle mouse parallax on the hero wordmark */
+  /* shrink the giant wordmark so the whole word always fits the viewport
+     (otherwise the centered text overflows and clips the leading S / trailing H) */
   var wm=document.getElementById('wordmark');
+  function fitWordmark(){
+    if(!wm) return;
+    wm.style.fontSize='';                 // reset to the CSS clamp() value
+    var avail = wm.clientWidth;
+    if(!avail) return;
+    var actual = wm.scrollWidth;          // true text width (incl. overflow)
+    if(actual > avail){
+      var cur = parseFloat(getComputedStyle(wm).fontSize);
+      wm.style.fontSize = Math.floor(cur * (avail/actual) * 0.96) + 'px';
+    }
+  }
+  fitWordmark();
+  window.addEventListener('resize', fitWordmark);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(fitWordmark); }
+
+  /* subtle mouse parallax on the hero wordmark */
   var hero=document.querySelector('header');
   if(wm && hero){
     hero.addEventListener('mousemove', function(e){
