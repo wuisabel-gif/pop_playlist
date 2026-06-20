@@ -65,7 +65,7 @@
 
   /* ===== HERO ===== */
   header{min-height:92vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
-    text-align:center;padding:60px clamp(16px,5vw,40px) 30px;position:relative}
+    text-align:center;padding:60px clamp(16px,5vw,40px) 30px;position:relative;z-index:2}
   .eyebrow{font-family:var(--mono);font-size:clamp(10px,1.4vw,13px);letter-spacing:4px;text-transform:uppercase;
     color:var(--cyan);margin-bottom:22px;border:1px solid rgba(0,229,255,.5);padding:7px 16px;border-radius:999px;
     background:rgba(0,229,255,.06)}
@@ -262,6 +262,16 @@
   /* sparkles cursor */
   .spark{position:fixed;pointer-events:none;z-index:55;font-size:14px;animation:sparkfade .8s ease-out forwards}
   @keyframes sparkfade{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-26px) scale(.3)}}
+
+  /* ===== candy rain ===== */
+  .candyrain{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+  .candy{position:absolute;top:-8vh;will-change:transform,opacity;
+    animation:candyfall linear infinite;filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+  @keyframes candyfall{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);opacity:0}
+    8%{opacity:.9}
+    92%{opacity:.9}
+    100%{transform:translateY(112vh) translateX(var(--sway,20px)) rotate(var(--spin,360deg));opacity:0}}
 
   /* footer */
   footer{padding:60px clamp(16px,5vw,64px) 120px;text-align:center;border-top:1px solid rgba(255,45,155,.3);margin-top:40px}
@@ -726,6 +736,32 @@
 (function(){
   "use strict";
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ===== candy rain ===== */
+  (function candyRain(){
+    if(reduce) return;
+    var sweets = ['🍬','🍭','🧁','🍩','🍪','🍫','🍡','🌈','✦','🩷'];
+    var layer = document.createElement('div');
+    layer.className = 'candyrain';
+    layer.setAttribute('aria-hidden','true');
+    document.body.appendChild(layer);
+    var COUNT = window.innerWidth < 600 ? 14 : 26;
+    for(var i=0;i<COUNT;i++){
+      var c = document.createElement('span');
+      c.className = 'candy';
+      c.textContent = sweets[(Math.random()*sweets.length)|0];
+      var size = 14 + Math.random()*24;            // 14–38px
+      var dur  = 7 + Math.random()*10;             // 7–17s fall
+      c.style.left = (Math.random()*100) + 'vw';
+      c.style.fontSize = size.toFixed(0) + 'px';
+      c.style.animationDuration = dur.toFixed(2) + 's';
+      c.style.animationDelay = (-Math.random()*dur).toFixed(2) + 's';  // pre-fill so they're mid-fall on load
+      c.style.setProperty('--sway', (Math.random()*120-60).toFixed(0) + 'px');
+      c.style.setProperty('--spin', (Math.random()*720-360).toFixed(0) + 'deg');
+      c.style.opacity = (0.55 + Math.random()*0.45).toFixed(2);
+      layer.appendChild(c);
+    }
+  })();
 
   /* glitch wordmark */
   var wm = document.getElementById('wordmark');
