@@ -207,7 +207,7 @@
   .sandboxnote b{color:var(--lime)}
 
   /* ===== MEDIA PLAYER WINDOW (signature) ===== */
-  .player{position:fixed;bottom:22px;right:22px;width:340px;z-index:60;
+  .player{position:fixed;bottom:22px;right:22px;width:300px;z-index:60;
     border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.25);
     background:linear-gradient(180deg,#1a1226,#0c0814);
     box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 0 1px rgba(255,45,155,.2);
@@ -237,7 +237,7 @@
   .pmeta .pt{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink)}
   .pmeta .pa{font-size:11px;color:var(--cyan);margin-top:2px}
   .pembed{margin-top:12px;border-radius:10px;overflow:hidden}
-  .pembed iframe{width:100%;height:352px;border:0;display:block;border-radius:10px}
+  .pembed iframe{width:100%;height:152px;border:0;display:block;border-radius:10px}
   .eq{display:flex;gap:3px;align-items:flex-end;height:22px;margin-top:12px}
   .eq span{flex:1;background:linear-gradient(180deg,var(--lime),var(--bubblegum));border-radius:2px;height:30%;animation:bounce 1s ease-in-out infinite}
   .player.playing .eq span{animation-play-state:running}
@@ -257,7 +257,7 @@
     background:linear-gradient(135deg,var(--bubblegum),var(--cyan));box-shadow:0 10px 30px rgba(255,45,155,.5);
     font-size:20px;animation:pulse 2s ease-in-out infinite}
   @keyframes pulse{0%,100%{box-shadow:0 10px 30px rgba(255,45,155,.5)}50%{box-shadow:0 10px 40px rgba(0,229,255,.7)}}
-  @media(max-width:560px){.player{width:min(90vw,330px);right:12px;bottom:12px}
+  @media(max-width:560px){.player{width:min(88vw,320px);right:12px;bottom:12px}
     .pbar{padding:10px 12px}
     .pbtn{width:34px;height:34px;font-size:22px}}
 
@@ -993,7 +993,7 @@ window.onSpotifyIframeApiReady = function(IFrameAPI){
 
   var cornerEl = document.getElementById('cornerEmbed');
   if(cornerEl){
-    IFrameAPI.createController(cornerEl, { uri: 'spotify:playlist:37i9dQZF1DX7HOk71GPfSw', height: 352 }, function(ctrl){
+    IFrameAPI.createController(cornerEl, { uri: 'spotify:playlist:37i9dQZF1DX7HOk71GPfSw', height: 152 }, function(ctrl){
       window.cornerCtrl = ctrl;
       ctrl.addListener('playback_update', function(e){
         if(!e || !e.data) return;
