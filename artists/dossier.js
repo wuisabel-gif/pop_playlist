@@ -13,7 +13,9 @@
     "ariana-grande":["artist/66CXWjxzNUsdJxJ2JdwvnR","album/5EYKrEDnKhhcNxGedaRQeK","album/3euz4vS7ezKGnNSwgyvKcd","album/2fYhqwDWXjbpjaIJPEfKFw","album/3tx8gQqWbGwqIGZHqDNrGe"],
     "tate-mcrae":["artist/45dkTj5sMRSjrmBSBeiHym","album/3w32SV56JvtJXsrYtThwzP","album/0OUOx6rJXtL66AzTnP9KUE","album/5fhTetHew6Eph6HfQ9O5gJ"],
     "doja-cat":["artist/5cj0lLjcoR7YOSnhnX0Po5","album/6DmPNcfpkXBVRJsEIJY9tl","album/1nAQbHeOWTfQzbOoFrvndW","album/1MmVkhiwTH0BkNOU3nw5d3","album/7dHwC2E4J9ude0GoPhp4SI"],
-    "zara-larsson":["artist/1Xylc3o4UrD53lo9CvFvVg","album/0qqZ6HD72So93exL9rH7zi","album/79y7DSLFQH3907u4ysOMGr","album/3ciEcHv8axaPC5YHTJ72Bg","album/1Rlo7Ga1Dmrx5cV4KOe4Fs"]
+    "zara-larsson":["artist/1Xylc3o4UrD53lo9CvFvVg","album/0qqZ6HD72So93exL9rH7zi","album/79y7DSLFQH3907u4ysOMGr","album/3ciEcHv8axaPC5YHTJ72Bg","album/1Rlo7Ga1Dmrx5cV4KOe4Fs"],
+    "tinashe":["artist/0NIIxcxNHmOoyBx03SfTCD","album/6zXUDBGLbrB9Kgkw2Y3F7L","album/4oUQWJAcEtTuhYFR9AGfaC","album/0u3rjsCgagcSxHoRtXMKQo","album/03mqFnIf0SxlMFVDO4a3YK","album/0LHqiYYOsVM9lh9c9w0G1j","album/0Ytzeqoskd5VfSVfGGA1SM","album/6lCHEpHcYgC24XO87InJjZ"],
+    "alice-longyu-gao":["artist/5HvKzBgj4yphQfBJjBJrhL","album/3Xv4zRg31XZC4T0l9uxQu7","album/2TqkISTB5q8RlsOQSuEnGH","album/5QC73cr2qO212wgO5T6noH","album/5YjuPPmMZy5VGjlesAPbHG","album/4X8ok55M8QulHdTmSEOy3M"]
   };
   var slug = document.body.getAttribute('data-slug');
   var frame = document.getElementById('spembed');
