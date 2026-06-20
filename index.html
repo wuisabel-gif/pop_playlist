@@ -981,21 +981,40 @@ window.onSpotifyIframeApiReady = function(IFrameAPI){
   });
 
   // The corner "now playing" player — a real, controllable Spotify embed.
+  var pendingUri = null;       // a play request that arrived before the controller was ready
+  var wantPlay   = false;      // we asked to play; resume once the embed reports it's loaded
+  function cornerPlay(uri){
+    var c = window.cornerCtrl;
+    if(!c){ pendingUri = uri; return; }     // not mounted yet — play once ready
+    wantPlay = true;
+    try{ c.loadUri(uri); }catch(e){}
+    try{ c.play(); }catch(e){}              // attempt now (inside the click gesture)
+  }
+
   var cornerEl = document.getElementById('cornerEmbed');
   if(cornerEl){
     IFrameAPI.createController(cornerEl, { uri: 'spotify:playlist:37i9dQZF1DX7HOk71GPfSw', height: 152 }, function(ctrl){
       window.cornerCtrl = ctrl;
-      track(ctrl);
+      ctrl.addListener('playback_update', function(e){
+        if(!e || !e.data) return;
+        if(e.data.isPaused === false){      // actually playing now
+          wantPlay = false;
+          if(active && active !== ctrl){ active.pause(); }
+          active = ctrl;
+        } else if(wantPlay){                 // loaded but still paused — kick it off
+          wantPlay = false;
+          try{ ctrl.play(); }catch(err){}
+        }
+      });
+      if(pendingUri){ var u = pendingUri; pendingUri = null; cornerPlay(u); }
     });
   }
 
-  // Play a named artist / radio in the corner player (called from cards, previews, hero buttons).
+  // Play a named artist / radio in the corner player (cards, previews, hero buttons).
   window.playArtist = function(name){
     var uri = uriByName[norm(name)];
-    var c = window.cornerCtrl;
-    if(!uri || !c) return false;
-    try{ c.loadUri(uri); if(typeof c.play==='function') c.play(); else if(typeof c.resume==='function') c.resume(); }
-    catch(err){ try{ c.togglePlay(); }catch(e2){} }
+    if(!uri) return false;
+    cornerPlay(uri);
     return true;
   };
 };
