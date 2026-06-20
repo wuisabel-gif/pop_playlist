@@ -358,7 +358,8 @@
       <h1 class="wordmark" id="wordmark"><span class="chrome">SUGARCRASH</span><span class="slash">//</span></h1>
       <p class="subhead">A zine + fake web-radio for the <b>pop &amp; hyperpop artists I can't stop playing</b> — from Ayesha Erotica and Slayyyter to Gaga, Ariana, Doja and the rest of the rotation.</p>
       <div class="herobtns">
-        <button class="btn btn-main" id="playGenre">▶ play the genre</button>
+        <button class="btn btn-main" id="playHyperpop">▶ play hyperpop</button>
+        <button class="btn btn-main" id="playPop">▶ play pop</button>
         <a href="#artists" class="btn btn-ghost">meet the rotation →</a>
       </div>
     </header>
@@ -490,6 +491,10 @@
       <div class="seclabel">real audio</div>
       <h2 class="sectitle">Press <em>play.</em></h2>
       <p style="color:#cbbce0;max-width:660px;font-size:15px">Official Spotify players — actual music, streamed legally straight from Spotify. Nothing is hosted here.</p>
+      <div class="players stagger" style="margin-bottom:30px">
+        <div class="pframe"><h4>✦ Hyperpop radio</h4><div class="spembed" data-uri="spotify:playlist:37i9dQZF1DX7HOk71GPfSw"></div></div>
+        <div class="pframe"><h4>✦ Pop radio</h4><div class="spembed" data-uri="spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"></div></div>
+      </div>
       <div class="players stagger">
         <div class="pframe"><h4>★ Ayesha Erotica</h4><div class="spembed" data-uri="spotify:artist:7M5pDtJpCdnftEQZtczYco"></div></div>
         <div class="pframe"><h4>★ Slayyyter</h4><div class="spembed" data-uri="spotify:artist:4QM5QCHicznALtX885CnZC"></div></div>
@@ -720,7 +725,11 @@
   toggle.addEventListener('click', function(){ setPlaying(!playing); blip(playing?700:440); });
   document.getElementById('next').addEventListener('click', function(){ load(idx+1); blip(820); if(!playing) setPlaying(true); });
   document.getElementById('prev').addEventListener('click', function(){ load(idx-1); blip(520); if(!playing) setPlaying(true); });
-  document.getElementById('playGenre').addEventListener('click', function(){ load(1); setPlaying(true); blip(660); player.scrollIntoView&&0; });
+  function playRadio(label){ blip(660); if(window.playArtistEmbed) window.playArtistEmbed(label); }
+  var phb=document.getElementById('playHyperpop');
+  if(phb) phb.addEventListener('click', function(){ playRadio('Hyperpop radio'); });
+  var ppb=document.getElementById('playPop');
+  if(ppb) ppb.addEventListener('click', function(){ playRadio('Pop radio'); });
 
   function loadArtist(name){
     for(var k=0;k<tracks.length;k++){ if(tracks[k].a.toLowerCase()===name.toLowerCase()){ load(k); setPlaying(true); blip(700); return; } }
@@ -850,7 +859,7 @@
     var r=el.getBoundingClientRect();
     burst(r.left+r.width/2, r.top+r.height/2);
   }
-  ['#playGenre','#toggle'].forEach(function(sel){
+  ['#playHyperpop','#playPop','#toggle'].forEach(function(sel){
     var el=document.querySelector(sel);
     if(el) el.addEventListener('click', function(){ burstFrom(el); });
   });
@@ -896,7 +905,7 @@
 window.onSpotifyIframeApiReady = function(IFrameAPI){
   var active = null;
   var byName = {};                         // artist name -> { ctrl, el }
-  function norm(s){ return (s||'').replace('★','').trim().toLowerCase(); }
+  function norm(s){ return (s||'').replace(/[★✦]/g,'').trim().toLowerCase(); }
   document.querySelectorAll('.spembed').forEach(function(el){
     var pframe = el.closest('.pframe');
     var h4 = pframe && pframe.querySelector('h4');
