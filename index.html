@@ -135,6 +135,8 @@
     background:rgba(255,255,255,.03);padding:0 0 20px;transition:.25s;cursor:pointer}
   .card:hover{transform:translateY(-6px) rotate(-.6deg);border-color:var(--bubblegum);box-shadow:0 18px 50px rgba(255,45,155,.35)}
   .art{height:180px;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:14px}
+  .artimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0}
+  .art > .eratag,.art > .playbadge{position:relative;z-index:2}
   .art::after{content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;
     background-image:radial-gradient(rgba(255,255,255,.7) 1px,transparent 1px);background-size:9px 9px}
   .a1{background:linear-gradient(135deg,#ff2d9b,#b388ff)}            /* ayesha */
@@ -384,7 +386,7 @@
       <div class="grid stagger">
 
         <article class="card">
-          <div class="art a1"><span class="eratag">blueprint</span><span class="playbadge">▶</span></div>
+          <div class="art a1"><img class="artimg" src="https://i.scdn.co/image/ab67616100005174504d26793b7f34f99506c3db" alt="Ayesha Erotica" loading="lazy" onerror="this.remove()"><span class="eratag">blueprint</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Ayesha Erotica</h3>
             <p>Falling down the Ayesha rabbit hole felt like a rite of passage, and I went all the way down. Her bedroom-made, gleefully filthy demos are the blueprint I keep circling back to — honestly, half the songs I love wouldn't exist without her.</p>
@@ -393,7 +395,7 @@
         </article>
 
         <article class="card">
-          <div class="art a2"><span class="eratag">y2k pop</span><span class="playbadge">▶</span></div>
+          <div class="art a2"><img class="artimg" src="https://i.scdn.co/image/ab67616100005174d475efee7c254f7e77a2d306" alt="Slayyyter" loading="lazy" onerror="this.remove()"><span class="eratag">y2k pop</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Slayyyter</h3>
             <p>I found her through "Mind Games" and fell straight into the Y2K diva fantasy. Something about how knowingly over-the-top it all is makes me feel like the main character every single time I press play.</p>
@@ -402,7 +404,7 @@
         </article>
 
         <article class="card">
-          <div class="art a8"><span class="eratag">crossover</span><span class="playbadge">▶</span></div>
+          <div class="art a8"><img class="artimg" src="https://i.scdn.co/image/ab676161000051746fa76436a2bba83b9f1d6fd1" alt="Charli xcx" loading="lazy" onerror="this.remove()"><span class="eratag">crossover</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Charli xcx</h3>
             <p>"Brat" didn't just live on my phone, it hijacked my entire summer. I'd been with her since the "Vroom Vroom" days, so watching the rest of the world finally catch up felt weirdly, wonderfully personal.</p>
@@ -411,7 +413,7 @@
         </article>
 
         <article class="card">
-          <div class="art a9"><span class="eratag">flamboyant</span><span class="playbadge">▶</span></div>
+          <div class="art a9"><img class="artimg" src="https://i.scdn.co/image/ab676161000051744ae93c6f14281f933ec83158" alt="Dorian Electra" loading="lazy" onerror="this.remove()"><span class="eratag">flamboyant</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Dorian Electra</h3>
             <p>The first time I heard "Flamboyant" I actually had to sit down — I'd never heard a song be that loud and that free at once. Dorian makes me want to be more myself, dialed all the way up and unapologetic about it.</p>
@@ -420,7 +422,7 @@
         </article>
 
         <article class="card">
-          <div class="art a10"><span class="eratag">adjacent</span><span class="playbadge">▶</span></div>
+          <div class="art a10"><img class="artimg" src="https://i.scdn.co/image/ab676161000051748aaca79d5544dc02bea2b6b2" alt="Addison Rae" loading="lazy" onerror="this.remove()"><span class="eratag">adjacent</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Addison Rae</h3>
             <p>I'll admit I doubted the TikTok-to-pop jump, and then "Diet Pepsi" completely disarmed me. Now I'm the friend aggressively sending her songs to everyone, insisting they actually sit down and listen.</p>
@@ -436,7 +438,7 @@
       <div class="grid stagger">
 
         <article class="card">
-          <div class="art a3"><span class="eratag">icon</span><span class="playbadge">▶</span></div>
+          <div class="art a3"><img class="artimg" src="https://i.scdn.co/image/ab67616100005174aadc18cac8d48124357c38e6" alt="Lady Gaga" loading="lazy" onerror="this.remove()"><span class="eratag">icon</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Lady Gaga</h3>
             <p>The first artist I ever screamed along to in the car, and I've never gone a year without a Gaga song in heavy rotation since. From "Bad Romance" to the jazz detours, she taught me that going too far is the entire point.</p>
@@ -445,7 +447,7 @@
         </article>
 
         <article class="card">
-          <div class="art a4"><span class="eratag">powerhouse</span><span class="playbadge">▶</span></div>
+          <div class="art a4"><img class="artimg" src="https://i.scdn.co/image/ab67616100005174766397ec42a573a53eb5fb87" alt="Ariana Grande" loading="lazy" onerror="this.remove()"><span class="eratag">powerhouse</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Ariana Grande</h3>
             <p>Those whistle notes broke my brain in the best way the first time I heard them. "thank u, next" got me through a rough stretch, and "eternal sunshine" quietly proved she only keeps getting better.</p>
@@ -454,7 +456,7 @@
         </article>
 
         <article class="card">
-          <div class="art a5"><span class="eratag">gen-z pop</span><span class="playbadge">▶</span></div>
+          <div class="art a5"><img class="artimg" src="https://i.scdn.co/image/ab67616100005174bed8016bd64422793ff3bc75" alt="Tate McRae" loading="lazy" onerror="this.remove()"><span class="eratag">gen-z pop</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Tate McRae</h3>
             <p>"you broke me first" caught me at exactly the wrong-right moment and I've been hooked ever since. Watching her dance through "greedy" makes me genuinely regret ever quitting my own dance classes.</p>
@@ -463,7 +465,7 @@
         </article>
 
         <article class="card">
-          <div class="art a6"><span class="eratag">shapeshifter</span><span class="playbadge">▶</span></div>
+          <div class="art a6"><img class="artimg" src="https://i.scdn.co/image/ab676161000051748a0644455ebfa7d3976f5101" alt="Doja Cat" loading="lazy" onerror="this.remove()"><span class="eratag">shapeshifter</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Doja Cat</h3>
             <p>I came for "Mooo!" as a joke and stayed because she can genuinely do anything. Every era sounds like a completely different artist, and somehow I'm equally obsessed with all of them.</p>
@@ -472,7 +474,7 @@
         </article>
 
         <article class="card">
-          <div class="art a7"><span class="eratag">dance-pop</span><span class="playbadge">▶</span></div>
+          <div class="art a7"><img class="artimg" src="https://i.scdn.co/image/ab67616100005174d519a7e349541cba8f85e965" alt="Zara Larsson" loading="lazy" onerror="this.remove()"><span class="eratag">dance-pop</span><span class="playbadge">▶</span></div>
           <div class="cardbody">
             <h3>Zara Larsson</h3>
             <p>"Lush Life" lived on every single one of my playlists for a solid year straight. She makes the kind of bright, stadium-sized pop that instantly fixes a bad mood — no notes, no skips.</p>
