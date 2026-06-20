@@ -236,6 +236,8 @@
   .pmeta{margin-top:12px}
   .pmeta .pt{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink)}
   .pmeta .pa{font-size:11px;color:var(--cyan);margin-top:2px}
+  .pembed{margin-top:12px;border-radius:10px;overflow:hidden}
+  .pembed iframe{width:100%;height:152px;border:0;display:block;border-radius:10px}
   .eq{display:flex;gap:3px;align-items:flex-end;height:22px;margin-top:12px}
   .eq span{flex:1;background:linear-gradient(180deg,var(--lime),var(--bubblegum));border-radius:2px;height:30%;animation:bounce 1s ease-in-out infinite}
   .player.playing .eq span{animation-play-state:running}
@@ -717,17 +719,11 @@
       </span>
     </div>
     <div class="pbody">
-      <div class="pcover"><div class="disc"></div></div>
       <div class="pmeta">
-        <div class="pt" id="trackName">now playing…</div>
-        <div class="pa" id="trackArtist">— my rotation —</div>
+        <div class="pt" id="trackName">★ now playing</div>
+        <div class="pa" id="trackArtist">Hyperpop radio</div>
       </div>
-      <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-      <div class="pcontrols">
-        <button id="prev" aria-label="previous">◀◀</button>
-        <button class="ppt" id="toggle" aria-label="play / pause">▶</button>
-        <button id="next" aria-label="next">▶▶</button>
-      </div>
+      <div class="pembed"><div id="cornerEmbed"></div></div>
     </div>
   </div>
   <div class="pmin" id="restoreBtn" title="open player">★</div>
@@ -769,27 +765,12 @@
   wm.addEventListener('mouseenter', glitch);
   if(!reduce) setInterval(function(){ if(Math.random()>.6) glitch(); }, 3200);
 
-  /* fake player state */
+  /* corner player — a real Spotify embed (see onSpotifyIframeApiReady below) */
   var player = document.getElementById('player');
-  var toggle = document.getElementById('toggle');
-  var tracks = [
-    {t:'now playing…',     a:'— my rotation —'},
-    {t:'blueprint.exe',    a:'ayesha erotica'},
-    {t:'chrome heart',     a:'slayyyter'},
-    {t:'arena mode',       a:'lady gaga'},
-    {t:'whistle tone',     a:'ariana grande'},
-    {t:'breathy hook',     a:'tate mcrae'},
-    {t:'shapeshift',       a:'doja cat'},
-    {t:'stadium chorus',   a:'zara larsson'},
-    {t:'avant-pop',        a:'charli xcx'},
-    {t:'flamboyant.exe',   a:'dorian electra'},
-    {t:'internet star',    a:'addison rae'}
-  ];
-  var idx = 0, playing = false;
   var nameEl = document.getElementById('trackName');
   var artistEl = document.getElementById('trackArtist');
 
-  // tiny synth blip via WebAudio (no copyrighted audio)
+  // tiny synth blip via WebAudio (UI click feedback)
   var AC = window.AudioContext || window.webkitAudioContext;
   var actx = null;
   function blip(freq){
@@ -804,42 +785,26 @@
       o.start(); o.stop(actx.currentTime+.18);
     }catch(e){}
   }
-  function setPlaying(on){
-    playing = on;
-    player.classList.toggle('playing', on);
-    toggle.textContent = on ? '❚❚' : '▶';
+  function openPlayer(){ if(player) player.style.display='block'; var r=document.getElementById('restoreBtn'); if(r) r.style.display='none'; }
+
+  // load a named artist / radio into the real corner player and play it
+  function loadArtist(name){
+    if(nameEl) nameEl.textContent = 'now playing';
+    if(artistEl) artistEl.textContent = name;
+    openPlayer();
+    if(window.playArtist) window.playArtist(name);
   }
-  function load(i){
-    idx = (i+tracks.length)%tracks.length;
-    nameEl.textContent = tracks[idx].t;
-    artistEl.textContent = tracks[idx].a;
-  }
-  toggle.addEventListener('click', function(){ setPlaying(!playing); blip(playing?700:440); });
-  document.getElementById('next').addEventListener('click', function(){ load(idx+1); blip(820); if(!playing) setPlaying(true); });
-  document.getElementById('prev').addEventListener('click', function(){ load(idx-1); blip(520); if(!playing) setPlaying(true); });
-  function playRadio(label){ blip(660); if(window.playArtistEmbed) window.playArtistEmbed(label); }
+  function playRadio(label){ blip(660); loadArtist(label); }
   var phb=document.getElementById('playHyperpop');
   if(phb) phb.addEventListener('click', function(){ playRadio('Hyperpop radio'); });
   var ppb=document.getElementById('playPop');
   if(ppb) ppb.addEventListener('click', function(){ playRadio('Pop radio'); });
 
-  function loadArtist(name){
-    for(var k=0;k<tracks.length;k++){ if(tracks[k].a.toLowerCase()===name.toLowerCase()){ load(k); setPlaying(true); blip(700); return; } }
-    artistEl.textContent = name; nameEl.textContent='live set'; setPlaying(true); blip(700);
-  }
   document.querySelectorAll('#artists .card').forEach(function(c){
-    c.addEventListener('click', function(){
-      var name = c.querySelector('h3').textContent;
-      loadArtist(name);
-      if(window.playArtistEmbed) window.playArtistEmbed(name);   // start the real Spotify audio
-    });
+    c.addEventListener('click', function(){ blip(700); loadArtist(c.querySelector('h3').textContent); });
   });
   document.querySelectorAll('.pv').forEach(function(b){
-    b.addEventListener('click', function(){
-      var name = b.getAttribute('data-artist');
-      loadArtist(name);
-      if(window.playArtistEmbed) window.playArtistEmbed(name);
-    });
+    b.addEventListener('click', function(){ blip(700); loadArtist(b.getAttribute('data-artist')); });
   });
 
   /* minimize / close / restore */
@@ -848,7 +813,7 @@
   var restore = document.getElementById('restoreBtn');
   function collapse(){ player.style.display='none'; restore.style.display='grid'; }
   minBtn.addEventListener('click', function(e){ e.stopPropagation(); collapse(); });
-  closeBtn.addEventListener('click', function(e){ e.stopPropagation(); setPlaying(false); collapse(); blip(360); });
+  closeBtn.addEventListener('click', function(e){ e.stopPropagation(); if(window.cornerCtrl){ try{ window.cornerCtrl.pause(); }catch(err){} } collapse(); blip(360); });
   restore.addEventListener('click', function(){ player.style.display='block'; restore.style.display='none'; });
 
   /* draggable window */
@@ -951,7 +916,7 @@
     var r=el.getBoundingClientRect();
     burst(r.left+r.width/2, r.top+r.height/2);
   }
-  ['#playHyperpop','#playPop','#toggle'].forEach(function(sel){
+  ['#playHyperpop','#playPop'].forEach(function(sel){
     var el=document.querySelector(sel);
     if(el) el.addEventListener('click', function(){ burstFrom(el); });
   });
@@ -996,31 +961,40 @@
    whenever a new embed starts. */
 window.onSpotifyIframeApiReady = function(IFrameAPI){
   var active = null;
-  var byName = {};                         // artist name -> { ctrl, el }
+  var uriByName = {};                       // artist / radio name -> spotify uri
   function norm(s){ return (s||'').replace(/[★✦]/g,'').trim().toLowerCase(); }
+  function track(ctrl){                      // keep only one embed playing at a time
+    ctrl.addListener('playback_update', function(e){
+      if(e && e.data && e.data.isPaused === false){
+        if(active && active !== ctrl){ active.pause(); }
+        active = ctrl;
+      }
+    });
+  }
+
+  // Press-play / radio embeds: mount them and remember each one's uri by name.
   document.querySelectorAll('.spembed').forEach(function(el){
     var pframe = el.closest('.pframe');
     var h4 = pframe && pframe.querySelector('h4');
-    var key = h4 ? norm(h4.textContent) : null;
-    IFrameAPI.createController(el, { uri: el.getAttribute('data-uri'), height: 152 }, function(ctrl){
-      if(key) byName[key] = { ctrl: ctrl, el: pframe || el };
-      ctrl.addListener('playback_update', function(e){
-        // isPaused === false means this embed just started / resumed playback
-        if(e && e.data && e.data.isPaused === false){
-          if(active && active !== ctrl){ active.pause(); }
-          active = ctrl;
-        }
-      });
-    });
+    if(h4) uriByName[norm(h4.textContent)] = el.getAttribute('data-uri');
+    IFrameAPI.createController(el, { uri: el.getAttribute('data-uri'), height: 152 }, track);
   });
 
-  // Clicking an artist card / preview button starts that artist's real embed.
-  window.playArtistEmbed = function(name){
-    var hit = byName[norm(name)];
-    if(!hit) return false;
-    if(hit.el && hit.el.scrollIntoView) hit.el.scrollIntoView({behavior:'smooth', block:'center'});
-    var c = hit.ctrl;
-    try{ if(typeof c.play==='function') c.play(); else if(typeof c.resume==='function') c.resume(); else c.togglePlay(); }
+  // The corner "now playing" player — a real, controllable Spotify embed.
+  var cornerEl = document.getElementById('cornerEmbed');
+  if(cornerEl){
+    IFrameAPI.createController(cornerEl, { uri: 'spotify:playlist:37i9dQZF1DX7HOk71GPfSw', height: 152 }, function(ctrl){
+      window.cornerCtrl = ctrl;
+      track(ctrl);
+    });
+  }
+
+  // Play a named artist / radio in the corner player (called from cards, previews, hero buttons).
+  window.playArtist = function(name){
+    var uri = uriByName[norm(name)];
+    var c = window.cornerCtrl;
+    if(!uri || !c) return false;
+    try{ c.loadUri(uri); if(typeof c.play==='function') c.play(); else if(typeof c.resume==='function') c.resume(); }
     catch(err){ try{ c.togglePlay(); }catch(e2){} }
     return true;
   };
