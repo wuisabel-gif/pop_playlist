@@ -727,10 +727,18 @@
     artistEl.textContent = name; nameEl.textContent='live set'; setPlaying(true); blip(700);
   }
   document.querySelectorAll('#artists .card').forEach(function(c){
-    c.addEventListener('click', function(){ loadArtist(c.querySelector('h3').textContent); });
+    c.addEventListener('click', function(){
+      var name = c.querySelector('h3').textContent;
+      loadArtist(name);
+      if(window.playArtistEmbed) window.playArtistEmbed(name);   // start the real Spotify audio
+    });
   });
   document.querySelectorAll('.pv').forEach(function(b){
-    b.addEventListener('click', function(){ loadArtist(b.getAttribute('data-artist')); });
+    b.addEventListener('click', function(){
+      var name = b.getAttribute('data-artist');
+      loadArtist(name);
+      if(window.playArtistEmbed) window.playArtistEmbed(name);
+    });
   });
 
   /* minimize / close / restore */
@@ -887,8 +895,14 @@
    whenever a new embed starts. */
 window.onSpotifyIframeApiReady = function(IFrameAPI){
   var active = null;
+  var byName = {};                         // artist name -> { ctrl, el }
+  function norm(s){ return (s||'').replace('★','').trim().toLowerCase(); }
   document.querySelectorAll('.spembed').forEach(function(el){
+    var pframe = el.closest('.pframe');
+    var h4 = pframe && pframe.querySelector('h4');
+    var key = h4 ? norm(h4.textContent) : null;
     IFrameAPI.createController(el, { uri: el.getAttribute('data-uri'), height: 152 }, function(ctrl){
+      if(key) byName[key] = { ctrl: ctrl, el: pframe || el };
       ctrl.addListener('playback_update', function(e){
         // isPaused === false means this embed just started / resumed playback
         if(e && e.data && e.data.isPaused === false){
@@ -898,6 +912,17 @@ window.onSpotifyIframeApiReady = function(IFrameAPI){
       });
     });
   });
+
+  // Clicking an artist card / preview button starts that artist's real embed.
+  window.playArtistEmbed = function(name){
+    var hit = byName[norm(name)];
+    if(!hit) return false;
+    if(hit.el && hit.el.scrollIntoView) hit.el.scrollIntoView({behavior:'smooth', block:'center'});
+    var c = hit.ctrl;
+    try{ if(typeof c.play==='function') c.play(); else if(typeof c.resume==='function') c.resume(); else c.togglePlay(); }
+    catch(err){ try{ c.togglePlay(); }catch(e2){} }
+    return true;
+  };
 };
 </script>
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
